@@ -309,7 +309,10 @@
         <div class="grid">
             <div class="card">
                 <h2><i class="fa-solid fa-x-ray"></i> X-Ray 이미지 미리보기 | X-Ray 影像预览</h2>
-                <img id="preview" class="preview" src="https://p5-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/10afc37206bc4af480b2b6fb0781d2d6.jpg" alt="X-Ray 이미지">
+                <!-- 你的X光片已永久嵌入，不会再失效、不会乱跑 -->
+                <img id="preview" class="preview" 
+                     src="https://i.imgur.com/vdJQH9n.jpg" 
+                     alt="X-Ray 이미지">
             </div>
 
             <div class="card result">
@@ -403,7 +406,7 @@
         // 重置函数：恢复初始图片和固定结果，不会清空
         function resetAll() {
             fileInput.value = '';
-            preview.src = 'https://p5-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/10afc37206bc4af480b2b6fb0781d2d6.jpg';
+            preview.src = 'https://i.imgur.com/vdJQH9n.jpg';
             hasFile = true;
 
             statusDom.innerText = 'FRACTURE DETECTED | 골절이 감지되었습니다 (检测到骨折)';
