@@ -15,7 +15,7 @@
         }
 
         body {
-            background: #f5f7fa;
+            background-color: #f5f7fa;
             min-height: 100vh;
         }
 
@@ -162,14 +162,14 @@
         <div class="grid">
             <div class="card">
                 <h3><i class="fa-solid fa-x-ray"></i> X-Ray 이미지 미리보기 | X-Ray 影像预览</h3>
-                <!-- ✅ 你发的原图永久固定在这里，无乱码、不消失、不移动 -->
-                <img class="preview" src="https://p5-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/8f8efaa6bbf44c389cf674f608e7676d.jpg" alt="X-Ray">
+                <!-- ✅ 这里引用你本地的 xray.jpg，100% 不会失效 -->
+                <img class="preview" src="xray.jpg" alt="X-Ray 이미지">
             </div>
 
             <div class="card result">
                 <h3><i class="fa-solid fa-magnifying-glass-chart"></i> 분석 결과 | 检测结果</h3>
                 <div class="status">FRACTURE DETECTED | 골절 감지 (检测到骨折)</div>
-                <div class="score">신뢰도 : 95.5%</div>
+                <div class="score">신뢰도(置信度) : 95.5%</div>
                 <div class="progress"><div class="bar"></div></div>
                 <button class="btn btn-primary" onclick="analyze()">분석 시작 | 开始分析</button>
                 <button class="btn btn-reset" onclick="reset()">초기화 | 重置</button>
@@ -182,6 +182,7 @@
     const fileInput = document.getElementById('fileInput');
     const uploadBox = document.getElementById('uploadBox');
 
+    // 上传新图片
     uploadBox.onclick = () => fileInput.click();
     fileInput.onchange = (e) => {
         if(e.target.files[0]){
@@ -189,12 +190,14 @@
         }
     };
 
+    // 模拟分析
     function analyze() {
         alert("AI 분석 완료!");
     }
 
+    // 重置为你的原图
     function reset() {
-        preview.src = "https://p5-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/8f8efaa6bbf44c389cf674f608e7676d.jpg";
+        preview.src = "xray.jpg";
     }
 </script>
 </body>
