@@ -70,6 +70,17 @@
             text-align: center;
             box-shadow: var(--shadow);
             margin-bottom: 30px;
+            transition: transform 0.3s ease;
+        }
+
+        .upload-area:hover {
+            transform: translateY(-3px);
+        }
+
+        .upload-area h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 22px;
         }
 
         .upload-box {
@@ -77,12 +88,29 @@
             border-radius: 12px;
             padding: 30px;
             cursor: pointer;
+            transition: all 0.3s ease;
             display: inline-block;
             min-width: 300px;
         }
 
+        .upload-box:hover {
+            background-color: rgba(13, 110, 253, 0.05);
+        }
+
+        .upload-box i {
+            font-size: 40px;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
         input[type="file"] {
             display: none;
+        }
+
+        .tip-text {
+            color: var(--gray);
+            font-size: 14px;
+            margin-top: 8px;
         }
 
         .grid {
@@ -97,14 +125,29 @@
             border-radius: 16px;
             padding: 25px;
             box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+        }
+
+        .card h2 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .preview {
             width: 100%;
             height: 520px;
             object-fit: contain;
+            border: 1px solid var(--light-gray);
             border-radius: 10px;
-            background-color: #000;
+            background-color: #f8f9fa;
         }
 
         .result {
@@ -118,10 +161,20 @@
             font-size: 36px;
             font-weight: 700;
             margin: 20px 0;
+            transition: all 0.3s ease;
         }
 
         .fracture {
             color: var(--danger);
+        }
+
+        .normal {
+            color: var(--success);
+        }
+
+        .loading {
+            color: var(--gray);
+            font-size: 28px;
         }
 
         .score {
@@ -150,6 +203,10 @@
             background: linear-gradient(90deg, #ff6b6b, var(--danger));
         }
 
+        .bar-success {
+            background: linear-gradient(90deg, #4ade80, var(--success));
+        }
+
         .btn-group {
             display: flex;
             gap: 15px;
@@ -162,29 +219,83 @@
             border: none;
             border-radius: 10px;
             font-size: 16px;
+            font-weight: 500;
             cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .btn-primary {
             background-color: var(--primary);
-            color: white;
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
         }
 
         .btn-reset {
             background-color: var(--light-gray);
+            color: #333;
+        }
+
+        .btn-reset:hover {
+            background-color: #dee2e6;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: var(--gray);
+            font-size: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                font-size: 24px;
+                padding: 18px;
+            }
+
+            .status {
+                font-size: 28px;
+            }
+
+            .preview {
+                height: 380px;
+            }
+
+            .upload-box {
+                min-width: unset;
+                width: 100%;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
-
 <body>
     <header>
         AI Bone Fracture Detection System
         <p>AI 골절 검출 시스템 | AI 智能骨骼X光骨折检测系统</p>
     </header>
 
-    <div class="author-info">
-        이름(姓名) : 조여성호 &nbsp;&nbsp; 학번(学号) : 202217106
-    </div>
+    <div class="author-info"> 이름(姓名) : 조여성호 &nbsp;&nbsp; 학번(学号) : 202217106 </div>
 
     <div class="container">
         <div class="upload-area">
@@ -194,66 +305,122 @@
                 <p>파일을 선택해 주세요 | 点击选择图片文件</p>
                 <input type="file" id="fileInput" accept="image/*">
             </div>
+            <p class="tip-text"> 지원 형식: JPG / PNG / JPEG | 支持格式：JPG / PNG / JPEG </p>
         </div>
 
         <div class="grid">
             <div class="card">
                 <h2><i class="fa-solid fa-x-ray"></i> X-Ray 이미지 미리보기 | X-Ray 影像预览</h2>
-                <!-- ✅ 你的图片永久固定在这里，永远显示！ -->
-                <img id="preview" class="preview" src="https://p5-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/52ca97a1e9f44b0d863fc92b5161d338.jpg" alt="X-Ray">
+                <img id="preview" class="preview" src="https://picsum.photos/id/835/800/520" alt="X-Ray 이미지">
             </div>
 
             <div class="card result">
                 <h2><i class="fa-solid fa-magnifying-glass-chart"></i> 분석 결과 | 检测结果</h2>
-                <div id="status" class="status fracture">
-                    FRACTURE DETECTED | 골절이 감지되었습니다 (检测到骨折)
-                </div>
-                <div class="score">
-                    신뢰도(置信度)：<span id="confidence">96.2%</span>
-                </div>
+                <div id="status" class="status loading"> 이미지 업로드 대기 중 | 等待上传图片... </div>
+                <div class="score"> 신뢰도(置信度)：<span id="confidence">0%</span> </div>
                 <div class="progress">
-                    <div class="bar bar-danger" style="width:96.2%"></div>
+                    <div class="bar" id="bar"></div>
                 </div>
                 <div class="btn-group">
-                    <button class="btn btn-primary" onclick="analyzeImage()">분석 시작 | 开始分析</button>
-                    <button class="btn btn-reset" onclick="resetAll()">초기화 | 重置</button>
+                    <button class="btn btn-primary" id="analyzeBtn" onclick="analyzeImage()">
+                        <i class="fa-solid fa-robot"></i> 분석 시작 | 开始分析
+                    </button>
+                    <button class="btn btn-reset" onclick="resetAll()">
+                        <i class="fa-solid fa-refresh"></i> 초기화 | 重置
+                    </button>
                 </div>
             </div>
         </div>
+
+        <div class="footer">
+            AI Bone Fracture Detection Demo &copy; 2026 | 본 시스템은 데모용입니다. (本系统仅为演示用途)
+        </div>
     </div>
 
-<script>
-    const fileInput = document.getElementById('fileInput');
-    const preview = document.getElementById('preview');
-    const statusDom = document.getElementById('status');
-    const confidenceDom = document.getElementById('confidence');
-    const uploadBox = document.getElementById('uploadBox');
+    <script>
+        // 获取DOM元素
+        const fileInput = document.getElementById('fileInput');
+        const preview = document.getElementById('preview');
+        const statusDom = document.getElementById('status');
+        const confidenceDom = document.getElementById('confidence');
+        const barDom = document.getElementById('bar');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const uploadBox = document.getElementById('uploadBox');
 
-    // ✅ 强制图片永久存在
-    let hasFile = true;
+        // 初始状态
+        let hasFile = false;
 
-    uploadBox.addEventListener('click', () => fileInput.click());
-    fileInput.addEventListener('change', e => {
-        if (e.target.files[0]) {
-            preview.src = URL.createObjectURL(e.target.files[0]);
+        // 点击上传框触发文件选择
+        uploadBox.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // 文件选择监听 + 格式校验
+        fileInput.addEventListener('change', e => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            // 校验文件类型
+            const allowType = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+            if (!allowType.includes(file.type)) {
+                alert('이미지 파일(JPG/PNG)만 업로드 가능합니다. \n只能上传 JPG / PNG 格式图片！');
+                return;
+            }
+
+            // 加载预览图
+            preview.src = URL.createObjectURL(file);
             hasFile = true;
+        });
+
+        // 核心：分析图片（模拟AI检测）
+        function analyzeImage() {
+            if (!hasFile) {
+                alert('먼저 엑스레이 이미지를 업로드해 주세요. \n请先上传X光图片！');
+                return;
+            }
+
+            // 按钮禁用
+            analyzeBtn.disabled = true;
+            statusDom.className = 'status loading';
+            statusDom.innerText = 'AI 분석 중... | AI 分析中...';
+            confidenceDom.innerText = '0%';
+            barDom.style.width = '0%';
+            barDom.className = 'bar';
+
+            // 模拟AI分析延迟
+            setTimeout(() => {
+                const isFracture = Math.random() > 0.4;
+                const randomScore = (Math.random() * 15 + 85).toFixed(1);
+
+                if (isFracture) {
+                    statusDom.innerText = 'FRACTURE DETECTED | 골절이 감지되었습니다 (检测到骨折)';
+                    statusDom.className = 'status fracture';
+                    barDom.className = 'bar bar-danger';
+                } else {
+                    statusDom.innerText = 'NO FRACTURE | 골절 없음 (骨骼正常)';
+                    statusDom.className = 'status normal';
+                    barDom.className = 'bar bar-success';
+                }
+
+                // 更新结果
+                confidenceDom.innerText = `${randomScore}%`;
+                barDom.style.width = `${randomScore}%`;
+                analyzeBtn.disabled = false;
+            }, 1500);
         }
-    });
 
-    function analyzeImage() {
-        statusDom.innerText = "FRACTURE DETECTED | 골절이 감지되었습니다 (检测到骨折)";
-        statusDom.className = "status fracture";
-        confidenceDom.innerText = "96.2%";
-    }
-
-    function resetAll() {
-        // ✅ 永远恢复你这张图片，不会消失
-        preview.src = "https://p5-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/52ca97a1e9f44b0d863fc92b5161d338.jpg";
-        hasFile = true;
-        statusDom.innerText = "FRACTURE DETECTED | 골절이 감지되었습니다 (检测到骨折)";
-        statusDom.className = "status fracture";
-        confidenceDom.innerText = "96.2%";
-    }
-</script>
+        // 全局重置
+        function resetAll() {
+            fileInput.value = '';
+            preview.src = 'https://picsum.photos/id/835/800/520';
+            hasFile = false;
+            statusDom.innerText = '이미지 업로드 대기 중 | 等待上传图片...';
+            statusDom.className = 'status loading';
+            confidenceDom.innerText = '0%';
+            barDom.style.width = '0%';
+            barDom.className = 'bar';
+            analyzeBtn.disabled = false;
+        }
+    </script>
 </body>
 </html>
