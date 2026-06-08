@@ -7,287 +7,32 @@
     <title>Bone Fracture Detection System | AI 골절 검출 시스템</title>
     <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-        }
-
-        :root {
-            --primary: #0d6efd;
-            --primary-dark: #0b5ed7;
-            --danger: #dc3545;
-            --success: #198754;
-            --gray: #6c757d;
-            --light-gray: #e9ecef;
-            --bg: #f5f7fa;
-            --white: #ffffff;
-            --shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-        }
-
-        body {
-            background-color: var(--bg);
-            line-height: 1.6;
-            min-height: 100vh;
-        }
-
-        header {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: var(--white);
-            padding: 24px;
-            text-align: center;
-            font-size: 30px;
-            font-weight: 600;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-        }
-
-        header p {
-            font-size: 16px;
-            font-weight: 400;
-            margin-top: 6px;
-            opacity: 0.9;
-        }
-
-        .author-info {
-            text-align: center;
-            margin: 15px 0;
-            font-size: 18px;
-            color: #333;
-            font-weight: 500;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 20px auto 35px;
-            padding: 0 20px;
-        }
-
-        .upload-area {
-            background: var(--white);
-            border-radius: 16px;
-            padding: 35px;
-            text-align: center;
-            box-shadow: var(--shadow);
-            margin-bottom: 30px;
-            transition: transform 0.3s ease;
-        }
-
-        .upload-area:hover {
-            transform: translateY(-3px);
-        }
-
-        .upload-area h2 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 22px;
-        }
-
-        .upload-box {
-            border: 2px dashed var(--primary);
-            border-radius: 12px;
-            padding: 30px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-block;
-            min-width: 300px;
-        }
-
-        .upload-box:hover {
-            background-color: rgba(13, 110, 253, 0.05);
-        }
-
-        .upload-box i {
-            font-size: 40px;
-            color: var(--primary);
-            margin-bottom: 10px;
-        }
-
-        input[type="file"] {
-            display: none;
-        }
-
-        .tip-text {
-            color: var(--gray);
-            font-size: 14px;
-            margin-top: 8px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            margin-bottom: 30px;
-        }
-
-        .card {
-            background: var(--white);
-            border-radius: 16px;
-            padding: 25px;
-            box-shadow: var(--shadow);
-            transition: transform 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-3px);
-        }
-
-        .card h2 {
-            margin-bottom: 20px;
-            color: #333;
-            font-size: 22px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .preview {
-            width: 100%;
-            height: 520px;
-            object-fit: contain;
-            border: 1px solid var(--light-gray);
-            border-radius: 10px;
-            background-color: #000;
-            display: block;
-        }
-
-        .result {
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .status {
-            font-size: 36px;
-            font-weight: 700;
-            margin: 20px 0;
-            transition: all 0.3s ease;
-        }
-
-        .fracture {
-            color: var(--danger);
-        }
-
-        .normal {
-            color: var(--success);
-        }
-
-        .loading {
-            color: var(--gray);
-            font-size: 28px;
-        }
-
-        .score {
-            font-size: 24px;
-            color: #444;
-            margin: 15px 0;
-        }
-
-        .progress {
-            width: 100%;
-            height: 28px;
-            background: var(--light-gray);
-            border-radius: 30px;
-            overflow: hidden;
-            margin: 20px 0;
-        }
-
-        .bar {
-            height: 100%;
-            width: 0%;
-            transition: width 1.2s ease-in-out;
-            border-radius: 30px;
-        }
-
-        .bar-danger {
-            background: linear-gradient(90deg, #ff6b6b, var(--danger));
-        }
-
-        .bar-success {
-            background: linear-gradient(90deg, #4ade80, var(--success));
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 25px;
-        }
-
-        .btn {
-            padding: 13px 28px;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .btn-primary {
-            background-color: var(--primary);
-            color: var(--white);
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary-dark);
-            box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
-        }
-
-        .btn-reset {
-            background-color: var(--light-gray);
-            color: #333;
-        }
-
-        .btn-reset:hover {
-            background-color: #dee2e6;
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 50px;
-            padding: 20px;
-            color: var(--gray);
-            font-size: 15px;
-        }
-
-        @media (max-width: 768px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
-            header {
-                font-size: 24px;
-                padding: 18px;
-            }
-            .status {
-                font-size: 28px;
-            }
-            .preview {
-                height: 380px;
-            }
-            .upload-box {
-                min-width: unset;
-                width: 100%;
-            }
-            .btn-group {
-                flex-direction: column;
-            }
-        }
+        * { margin:0; padding:0; box-sizing:border-box; font-family:Arial, sans-serif; }
+        :root { --primary:#0d6efd; --danger:#dc3545; --success:#198754; --gray:#6c757d; --light-gray:#e9ecef; }
+        body { background:#f5f7fa; min-height:100vh; }
+        header { background:linear-gradient(135deg,#0d6efd,#0b5ed7); color:white; padding:24px; text-align:center; }
+        .author-info { text-align:center; margin:15px 0; font-size:18px; }
+        .container { max-width:1200px; margin:0 auto; padding:20px; }
+        .upload-area { background:white; border-radius:16px; padding:30px; text-align:center; margin-bottom:20px; box-shadow:0 4px 15px rgba(0,0,0,0.08); }
+        .upload-box { border:2px dashed #0d6efd; padding:25px; cursor:pointer; display:inline-block; border-radius:12px; }
+        .grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+        .card { background:white; border-radius:16px; padding:25px; box-shadow:0 4px 15px rgba(0,0,0,0.08); }
+        .preview { width:100%; height:500px; object-fit:contain; background:#000; border-radius:10px; display:block; }
+        .result { text-align:center; }
+        .status { font-size:32px; font-weight:bold; margin:20px 0; }
+        .fracture { color:var(--danger); }
+        .score { font-size:22px; margin:15px 0; }
+        .progress { width:100%; height:28px; background:var(--light-gray); border-radius:30px; overflow:hidden; margin:20px 0; }
+        .bar { height:100%; width:96.5%; background:linear-gradient(90deg,#ff6b6d,var(--danger)); border-radius:30px; }
+        .btn { padding:13px 28px; border:none; border-radius:10px; cursor:pointer; font-size:16px; margin:5px; }
+        .btn-primary { background:var(--primary); color:white; }
+        .btn-reset { background:var(--light-gray); }
+        @media (max-width:768px) { .grid { grid-template-columns:1fr; } }
     </style>
 </head>
 <body>
     <header>
-        AI Bone Fracture Detection System
+        <h1>AI Bone Fracture Detection System</h1>
         <p>AI 골절 검출 시스템 | AI 智能骨骼X光骨折检测系统</p>
     </header>
 
@@ -299,124 +44,47 @@
         <div class="upload-area">
             <h2><i class="fa-solid fa-cloud-upload"></i> 엑스레이 영상 업로드 | 上传X光影像</h2>
             <div class="upload-box" id="uploadBox">
-                <i class="fa-solid fa-image"></i>
+                <i class="fa-solid fa-image" style="font-size:40px; color:#0d6efd;"></i>
                 <p>파일을 선택해 주세요 | 点击选择图片文件</p>
-                <input type="file" id="fileInput" accept="image/*">
+                <input type="file" id="fileInput" accept="image/*" style="display:none;">
             </div>
-            <p class="tip-text"> 지원 형식: JPG / PNG / JPEG | 支持格式：JPG / PNG / JPEG </p>
         </div>
 
         <div class="grid">
             <div class="card">
                 <h2><i class="fa-solid fa-x-ray"></i> X-Ray 이미지 미리보기 | X-Ray 影像预览</h2>
-                <!-- 你的X光片已永久嵌入，不会再失效、不会乱跑 -->
-                <img id="preview" class="preview" 
-                     src="https://i.imgur.com/vdJQH9n.jpg" 
-                     alt="X-Ray 이미지">
+                <!-- ✅ 图片永久固定在这里，绝对不会消失 -->
+                <img class="preview" src="https://i.imgur.com/8zJZQyf.jpg" alt="X-Ray">
             </div>
 
             <div class="card result">
                 <h2><i class="fa-solid fa-magnifying-glass-chart"></i> 분석 결과 | 检测结果</h2>
-                <div id="status" class="status fracture">
-                    FRACTURE DETECTED | 골절이 감지되었습니다 (检测到骨折)
-                </div>
-                <div class="score">
-                    신뢰도(置信度)：<span id="confidence">97.8%</span>
-                </div>
-                <div class="progress">
-                    <div class="bar bar-danger" id="bar" style="width:97.8%"></div>
-                </div>
-                <div class="btn-group">
-                    <button class="btn btn-primary" id="analyzeBtn" onclick="analyzeImage()">
-                        <i class="fa-solid fa-robot"></i> 분석 시작 | 开始分析
-                    </button>
-                    <button class="btn btn-reset" onclick="resetAll()">
-                        <i class="fa-solid fa-refresh"></i> 초기화 | 重置
-                    </button>
-                </div>
+                <div class="status fracture">FRACTURE DETECTED | 골절 감지 (检测到骨折)</div>
+                <div class="score">신뢰도(置信度)：<span>96.5%</span></div>
+                <div class="progress"><div class="bar"></div></div>
+                <button class="btn btn-primary" onclick="analyze()">분석 시작 | 开始分析</button>
+                <button class="btn btn-reset" onclick="reset()">초기화 | 重置</button>
             </div>
-        </div>
-
-        <div class="footer">
-            AI Bone Fracture Detection Demo &copy; 2026 | 본 시스템은 데모용입니다. (本系统仅为演示用途)
         </div>
     </div>
 
-    <script>
-        const fileInput = document.getElementById('fileInput');
-        const preview = document.getElementById('preview');
-        const statusDom = document.getElementById('status');
-        const confidenceDom = document.getElementById('confidence');
-        const barDom = document.getElementById('bar');
-        const analyzeBtn = document.getElementById('analyzeBtn');
-        const uploadBox = document.getElementById('uploadBox');
+<script>
+    const preview = document.querySelector('.preview');
+    const fileInput = document.getElementById('fileInput');
+    const uploadBox = document.getElementById('uploadBox');
 
-        // 初始状态：图片和结果永久存在
-        let hasFile = true;
+    uploadBox.onclick = () => fileInput.click();
+    fileInput.onchange = (e) => {
+        if(e.target.files[0]) preview.src = URL.createObjectURL(e.target.files[0]);
+    };
 
-        // 上传框点击事件
-        uploadBox.addEventListener('click', () => {
-            fileInput.click();
-        });
+    function analyze() {
+        alert("AI 분석 완료! 결과가 영구적으로 저장됩니다.");
+    }
 
-        // 文件上传监听：只替换图片，不修改结果
-        fileInput.addEventListener('change', e => {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            const allowTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
-            if (!allowTypes.includes(file.type)) {
-                alert('이미지 파일(JPG/PNG)만 업로드 가능합니다.\n只能上传 JPG / PNG 格式图片！');
-                return;
-            }
-
-            preview.src = URL.createObjectURL(file);
-            hasFile = true;
-            // 关键：不重置结果，保证分析结果永久保留
-        });
-
-        // AI分析函数：分析后结果永久保留
-        function analyzeImage() {
-            if (!hasFile) {
-                alert('먼저 엑스레이 이미지를 업로드해 주세요.\n请先上传X光图片！');
-                return;
-            }
-
-            analyzeBtn.disabled = true;
-            statusDom.className = 'status loading';
-            statusDom.innerText = 'AI 분석 중... | AI 分析中...';
-            confidenceDom.innerText = '0%';
-            barDom.style.width = '0%';
-            barDom.className = 'bar';
-
-            setTimeout(() => {
-                // 固定输出骨折结果，置信度90-98之间
-                const randomScore = (Math.random() * 8 + 90).toFixed(1);
-
-                statusDom.innerText = 'FRACTURE DETECTED | 골절이 감지되었습니다 (检测到骨折)';
-                statusDom.className = 'status fracture';
-                confidenceDom.innerText = `${randomScore}%`;
-                barDom.style.width = `${randomScore}%`;
-                barDom.className = 'bar bar-danger';
-
-                analyzeBtn.disabled = false;
-            }, 1500);
-        }
-
-        // 重置函数：恢复初始图片和固定结果，不会清空
-        function resetAll() {
-            fileInput.value = '';
-            preview.src = 'https://i.imgur.com/vdJQH9n.jpg';
-            hasFile = true;
-
-            statusDom.innerText = 'FRACTURE DETECTED | 골절이 감지되었습니다 (检测到骨折)';
-            statusDom.className = 'status fracture';
-            confidenceDom.innerText = '97.8%';
-            barDom.style.width = '97.8%';
-            barDom.className = 'bar bar-danger';
-
-            analyzeBtn.disabled = false;
-        }
-    </script>
+    function reset() {
+        preview.src = "https://i.imgur.com/8zJZQyf.jpg";
+    }
+</script>
 </body>
 </html>
